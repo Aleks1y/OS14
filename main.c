@@ -18,7 +18,7 @@ void destroySemaphores(int count, sem_t *semaphores){
   }
 }
 
-void print(int thread_number, sem_t *semaphore_for_wait, sem_t *semaphore_for_post){
+void Print(int thread_number, sem_t *semaphore_for_wait, sem_t *semaphore_for_post){
     for(int i = 0; i < 10; ++i){
         errno = sem_wait(semaphore_for_wait);
         if(errno != SUCCESS){
@@ -38,7 +38,7 @@ void print(int thread_number, sem_t *semaphore_for_wait, sem_t *semaphore_for_po
 
 void* secondPrint(void* param){
     sem_t* semaphores = (sem_t*)param;
-    print(SECOND_THREAD, &semaphores[2], &semaphores[1]);
+    Print(SECOND_THREAD, &semaphores[2], &semaphores[1]);
     return NULL;
 }
 
@@ -54,19 +54,19 @@ int main(int argc, char **argv){
     
     errno = initSem(&semaphores[2], 0, 0);
     if(errno != SUCCESS){
-	    perror("Can not initialize second semaphore");
-      destroySemaphores(1, semaphores);
+	perror("Can not initialize second semaphore");
+      	destroySemaphores(1, semaphores);
     	exit(EXIT_FAILURE); 
     }
 	
     errno = pthread_create(&thread, NULL, secondPrint, semaphores);
     if(errno != SUCCESS){
-	    perror("Creating thread error");
-	    destroySemaphores(2, semaphores);
+	  perror("Creating thread error");
+	  destroySemaphores(2, semaphores);
    	  exit(EXIT_FAILURE); 
     }
 
-    print(FIRST_THREAD, &semaphores[2], &semaphores[1]);
+    Print(FIRST_THREAD, &semaphores[2], &semaphores[1]);
 
     errno = pthread_join(thread,NULL);
     if(errno != SUCCESS){
