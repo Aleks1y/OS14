@@ -15,6 +15,7 @@ void destroySemaphores(int count, sem_t *semaphores){
     errno = sem_destroy(&semaphores[i]);
     if(errno != SUCCESS){
     	perror("Destoying semaphore error");
+    }
   }
 }
 
@@ -46,13 +47,13 @@ int main(int argc, char **argv){
     pthread_t thread;
     sem_t semaphores[SEM_COUNT];
     
-    errno = initSem(&semaphores[1], 0, 1);
+    errno = sem_init(&semaphores[1], 0, 1);
     if(errno != SUCCESS){
 	    perror("Can not initialize first semaphore");
     	exit(EXIT_FAILURE); 
     }
     
-    errno = initSem(&semaphores[2], 0, 0);
+    errno = sem_init(&semaphores[2], 0, 0);
     if(errno != SUCCESS){
 	perror("Can not initialize second semaphore");
       	destroySemaphores(1, semaphores);
