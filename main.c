@@ -13,9 +13,9 @@
 void destroySemaphores(int count, sem_t *semaphores){
   for(int i = 0; i < count; ++i){
     errno = sem_destroy(&semaphores[i]);
-	  if(errno != SUCCESS){
-      perror("Destoying semaphore error");
-	}
+    if(errno != SUCCESS){
+    	perror("Destoying semaphore error");
+  }
 }
 
 void print(int thread_number, sem_t *semaphore_for_wait, sem_t *semaphore_for_post){
@@ -23,7 +23,7 @@ void print(int thread_number, sem_t *semaphore_for_wait, sem_t *semaphore_for_po
         errno = sem_wait(semaphore_for_wait);
         if(errno != SUCCESS){
             perror("Semaphore wait error");
-		        return;
+	    return;
         }
 
         printf("Thread № %d: %d\n", thread_number, i);
@@ -31,7 +31,7 @@ void print(int thread_number, sem_t *semaphore_for_wait, sem_t *semaphore_for_po
         errno = sem_post(semaphore_for_post);
         if(errno != SUCCESS){
             perror("Semaphore post error");
-		        return;
+	    return;
         } 
     }
 }
@@ -59,14 +59,14 @@ int main(int argc, char **argv){
     	exit(EXIT_FAILURE); 
     }
 	
-    errno = pthread_create(&thread, NULL, secondPrint, mutexes);
+    errno = pthread_create(&thread, NULL, secondPrint, semaphores);
     if(errno != SUCCESS){
 	    perror("Creating thread error");
 	    destroySemaphores(2, semaphores);
    	  exit(EXIT_FAILURE); 
     }
 
-    print(FIRST_THREAD, , &semaphores[2], &semaphores[1]);
+    print(FIRST_THREAD, &semaphores[2], &semaphores[1]);
 
     errno = pthread_join(thread,NULL);
     if(errno != SUCCESS){
