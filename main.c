@@ -64,7 +64,7 @@ int main(void){
    	  exit(EXIT_FAILURE); 
     }
 
-    print(&semaphores[2], &semaphores[1]);
+    Print(&semaphores[2], &semaphores[1]);
 
     errno = pthread_join(thread,NULL);
     if(errno != SUCCESS){
