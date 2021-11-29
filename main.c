@@ -7,8 +7,6 @@
 
 #define SEM_COUNT 2
 #define SUCCESS 0
-#define FIRST_THREAD 1
-#define SECOND_THREAD 2
 
 void destroySemaphores(int count, sem_t* semaphores){
   for(int i = 0; i < count; ++i){
@@ -18,7 +16,7 @@ void destroySemaphores(int count, sem_t* semaphores){
   }
 }
 
-void print(sem_t* semaphore_for_wait, sem_t* semaphore_for_post){
+void Print(sem_t* semaphore_for_wait, sem_t* semaphore_for_post){
     for(int i = 0;i < 10; ++i){
         errno = sem_wait(semaphore_for_wait);
         if(errno != SUCCESS){
@@ -38,7 +36,7 @@ void print(sem_t* semaphore_for_wait, sem_t* semaphore_for_post){
 
 void* secondPrint(void* param){
     sem_t* semaphores = (sem_t*)param;
-    print(SECOND_THREAD, &semaphores[2], &semaphores[1]);
+    Print(&semaphores[2], &semaphores[1]);
     return NULL;
 }
 
@@ -66,11 +64,11 @@ int main(void){
    	  exit(EXIT_FAILURE); 
     }
 
-    print(FIRST_THREAD, &semaphores[2], &semaphores[1]);
+    print(&semaphores[2], &semaphores[1]);
 
     errno = pthread_join(thread,NULL);
     if(errno != SUCCESS){
-	    perror("Thread join error");
+	  perror("Thread join error");
    	  destroySemaphores(SEM_COUNT, semaphores);
    	  exit(EXIT_FAILURE); 
     }
