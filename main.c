@@ -39,7 +39,7 @@ void Print(int thread_number, sem_t *semaphore_for_wait, sem_t *semaphore_for_po
 
 void* secondPrint(void* param){
     sem_t* semaphores = (sem_t*)param;
-    Print(SECOND_THREAD, &semaphores[2], &semaphores[1]);
+    Print(SECOND_THREAD, &semaphores[1], &semaphores[0]);
     return NULL;
 }
 
@@ -47,13 +47,13 @@ int main(int argc, char **argv){
     pthread_t thread;
     sem_t semaphores[SEM_COUNT];
     
-    errno = sem_init(&semaphores[1], 0, 1);
+    errno = sem_init(&semaphores[0], 0, 1);
     if(errno != SUCCESS){
 	perror("Can not initialize first semaphore");
     	exit(EXIT_FAILURE); 
     }
     
-    errno = sem_init(&semaphores[2], 0, 0);
+    errno = sem_init(&semaphores[1], 0, 0);
     if(errno != SUCCESS){
 	perror("Can not initialize second semaphore");
       	destroySemaphores(1, semaphores);
@@ -67,7 +67,7 @@ int main(int argc, char **argv){
    	exit(EXIT_FAILURE); 
     }
 
-    Print(FIRST_THREAD, &semaphores[1], &semaphores[2]);
+    Print(FIRST_THREAD, &semaphores[0], &semaphores[1]);
 
     errno = pthread_join(thread,NULL);
     if(errno != SUCCESS){
