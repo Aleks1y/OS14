@@ -2,7 +2,6 @@
 #include <pthread.h>
 #include <stdlib.h>
 #include <errno.h>
-#include <unistd.h>
 #include <semaphore.h>
 
 #define SEM_COUNT 2
