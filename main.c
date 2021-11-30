@@ -14,8 +14,7 @@
 
 void destroySemaphores(int count, sem_t *semaphores){
     for(int i = 0; i < count; ++i){
-  	errno = sem_destroy(&semaphores[i]);
-    	if(errno != SUCCESS){
+    	if(sem_destroy(&semaphores[i]) != SUCCESS){
     	    perror("Destoying semaphore error");
     	}
     }
@@ -23,16 +22,14 @@ void destroySemaphores(int count, sem_t *semaphores){
 
 void Print(int thread_number, sem_t *semaphore_for_wait, sem_t *semaphore_for_post){
     for(int i = 0; i < 10; ++i){
-        errno = sem_wait(semaphore_for_wait);
-        if(errno != SUCCESS){
+        if(sem_wait(semaphore_for_wait) != SUCCESS){
             perror("Semaphore wait error");
 	    return;
         }
 
         printf("Thread № %d: %d\n", thread_number, i);
         
-        errno = sem_post(semaphore_for_post);
-        if(errno != SUCCESS){
+        if(sem_post(semaphore_for_post) != SUCCESS){
             perror("Semaphore post error");
 	    return;
         } 
@@ -49,14 +46,12 @@ int main(int argc, char **argv){
     pthread_t thread;
     sem_t semaphores[SEM_COUNT];
     
-    errno = sem_init(&semaphores[FIRST_SEMAPHORE], 0, 1);
-    if(errno != SUCCESS){
+    if(sem_init(&semaphores[FIRST_SEMAPHORE], 0, 1) != SUCCESS){
 	perror("Can not initialize first semaphore");
     	exit(EXIT_FAILURE); 
     }
     
-    errno = sem_init(&semaphores[SECOND_SEMAPHORE], 0, 0);
-    if(errno != SUCCESS){
+    if(sem_init(&semaphores[SECOND_SEMAPHORE], 0, 0) != SUCCESS){
 	perror("Can not initialize second semaphore");
       	destroySemaphores(1, semaphores);
     	exit(EXIT_FAILURE); 
